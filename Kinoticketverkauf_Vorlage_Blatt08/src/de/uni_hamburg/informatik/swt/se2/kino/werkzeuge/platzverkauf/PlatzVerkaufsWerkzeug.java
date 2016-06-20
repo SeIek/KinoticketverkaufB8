@@ -10,6 +10,7 @@ import javax.swing.JPanel;
 import de.uni_hamburg.informatik.swt.se2.kino.fachwerte.Platz;
 import de.uni_hamburg.informatik.swt.se2.kino.materialien.Kinosaal;
 import de.uni_hamburg.informatik.swt.se2.kino.materialien.Vorstellung;
+import de.uni_hamburg.informatik.swt.se2.kino.werkzeuge.barzahlung.BarzahlungWerkzeug;
 
 /**
  * Mit diesem Werkzeug können Plätze verkauft und storniert werden. Es arbeitet
@@ -26,7 +27,14 @@ public class PlatzVerkaufsWerkzeug
     // Die aktuelle Vorstellung, deren Plätze angezeigt werden. Kann null sein.
     private Vorstellung _vorstellung;
 
+    // UI dieses Werkzeugs
     private PlatzVerkaufsWerkzeugUI _ui;
+    
+    // Die Subwerkzeuge
+    private BarzahlungWerkzeug _barzahlungWerkzeug;
+    
+    // Der für die aktuelle Auswahl zu zahlende Preis in Eurocent
+    private int _preis = 0;
 
     /**
      * Initialisiert das PlatzVerkaufsWerkzeug.
@@ -34,6 +42,7 @@ public class PlatzVerkaufsWerkzeug
     public PlatzVerkaufsWerkzeug()
     {
         _ui = new PlatzVerkaufsWerkzeugUI();
+        _barzahlungWerkzeug = new BarzahlungWerkzeug();
         registriereUIAktionen();
         // Am Anfang wird keine Vorstellung angezeigt:
         setVorstellung(null);
@@ -90,7 +99,11 @@ public class PlatzVerkaufsWerkzeug
      */
     private void fuehreBarzahlungDurch()
     {
-        verkaufePlaetze(_vorstellung);
+        // Verkaufen, wenn im Subwerkzeug Ok geklickt wurde 
+        if(_barzahlungWerkzeug.zahlen(_preis))
+        {
+            verkaufePlaetze(_vorstellung);
+        }
     }
 
     /**
@@ -111,27 +124,29 @@ public class PlatzVerkaufsWerkzeug
      */
     private void aktualisierePreisanzeige(Set<Platz> plaetze)
     {
-        if (istVerkaufenMoeglich(plaetze))
+        if (plaetze.isEmpty())
         {
-            int preis = _vorstellung.getPreisFuerPlaetze(plaetze);
+            _preis = 0;
+        }
+        else
+        {
+            _preis = _vorstellung.getPreisFuerPlaetze(plaetze);
+        }
+        
+        if (istVerkaufenMoeglich(plaetze) || plaetze.isEmpty())
+        {
             _ui.getPreisLabel().setText(
-                    "Gesamtpreis: " + preis + " Eurocent");
+                    "Gesamtpreis: " + _preis + " Eurocent");
         }
         else if (istStornierenMoeglich(plaetze))
         {
-            int preis = _vorstellung.getPreisFuerPlaetze(plaetze);
             _ui.getPreisLabel().setText(
-                    "Gesamtstorno: " + preis + " Eurocent");
-        }
-        else if (!plaetze.isEmpty())
-        {
-            _ui.getPreisLabel().setText(
-                    "Verkauf und Storno nicht gleichzeitig möglich!");
+                    "Gesamtstorno: " + _preis + " Eurocent");
         }
         else
         {
             _ui.getPreisLabel().setText(
-                    "Gesamtpreis: 0 Eurocent");
+                    "Verkauf und Storno nicht gleichzeitig möglich!");
         }
     }
 
