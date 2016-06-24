@@ -10,7 +10,7 @@ import javax.swing.JPanel;
 import de.uni_hamburg.informatik.swt.se2.kino.fachwerte.Platz;
 import de.uni_hamburg.informatik.swt.se2.kino.materialien.Kinosaal;
 import de.uni_hamburg.informatik.swt.se2.kino.materialien.Vorstellung;
-import de.uni_hamburg.informatik.swt.se2.kino.werkzeuge.barzahlung.BarzahlungWerkzeug;
+import de.uni_hamburg.informatik.swt.se2.kino.werkzeuge.barzahlung.BarzahlungsWerkzeug;
 
 /**
  * Mit diesem Werkzeug können Plätze verkauft und storniert werden. Es arbeitet
@@ -31,7 +31,7 @@ public class PlatzVerkaufsWerkzeug
     private PlatzVerkaufsWerkzeugUI _ui;
     
     // Die Subwerkzeuge
-    private BarzahlungWerkzeug _barzahlungWerkzeug;
+    private BarzahlungsWerkzeug _barzahlungWerkzeug;
     
     // Der für die aktuelle Auswahl zu zahlende Preis in Eurocent
     private int _preis = 0;
@@ -42,7 +42,7 @@ public class PlatzVerkaufsWerkzeug
     public PlatzVerkaufsWerkzeug()
     {
         _ui = new PlatzVerkaufsWerkzeugUI();
-        _barzahlungWerkzeug = new BarzahlungWerkzeug();
+        _barzahlungWerkzeug = new BarzahlungsWerkzeug();
         registriereUIAktionen();
         // Am Anfang wird keine Vorstellung angezeigt:
         setVorstellung(null);
