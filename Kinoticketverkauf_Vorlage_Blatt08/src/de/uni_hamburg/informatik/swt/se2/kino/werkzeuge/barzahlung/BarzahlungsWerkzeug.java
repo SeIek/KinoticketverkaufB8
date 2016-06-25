@@ -5,6 +5,8 @@ import java.awt.event.ActionListener;
 
 import javax.swing.JFrame;
 import javax.swing.JTextField;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 
 /**
  * 
@@ -77,15 +79,37 @@ public class BarzahlungsWerkzeug
             }
         });
         
-        _ui.getEingabefeld()
-        .addActionListener(new ActionListener()
-        {
-            @Override
-            public void actionPerformed(ActionEvent e)
-            {
-                reagiereAufEingabe();
-            }
-        });
+//      _ui.getEingabefeld()
+//      .addActionListener(new ActionListener()
+//      {
+//          @Override
+//          public void actionPerformed(ActionEvent e)
+//          {
+//              reagiereAufEingabe();
+//          }
+//      });
+
+      _ui.getEingabefeld().getDocument()
+      .addDocumentListener(new DocumentListener()
+      {
+          @Override
+          public void removeUpdate(DocumentEvent e)
+          {
+              reagiereAufEingabe();
+          }
+          
+          @Override
+          public void insertUpdate(DocumentEvent e)
+          {
+              reagiereAufEingabe();
+          }
+          
+          @Override
+          public void changedUpdate(DocumentEvent e)
+          {
+              reagiereAufEingabe();
+          }
+      });
     }
 
     /**
@@ -127,7 +151,7 @@ public class BarzahlungsWerkzeug
     private int getBetrag(JTextField textField)
     {
         String text = textField.getText();
-        if (istInt(text))
+        if (text.length() > 0 && istInt(text))
         {
             return Integer.parseInt(text);
         }

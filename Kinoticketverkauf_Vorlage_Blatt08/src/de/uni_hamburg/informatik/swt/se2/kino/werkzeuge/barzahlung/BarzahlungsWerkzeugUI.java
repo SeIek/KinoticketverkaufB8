@@ -13,6 +13,8 @@ import javax.swing.JSeparator;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 
+import de.uni_hamburg.informatik.swt.se2.kino.myswing.restrictedtextfields.JIntegerTextField;
+
 /**
  * Das UI für das BarzahlungsWerkzeug.
  * 
@@ -87,7 +89,13 @@ class BarzahlungsWerkzeugUI
         _behilfspanel = new JPanel();// ohne diesen bringt das JTextfield die Reihenfolge im GridLayout durcheinander
 
         _zuzahlen_betrag = "" + zuzahlen;
-        _eingabebetrag = new JTextField(10);
+        
+        // TODO hier geerbtes TextField eingebaut
+        // _eingabebetrag = new JTextField(10);
+        JIntegerTextField eingabe = new JIntegerTextField(10);
+        eingabe.setAllowNegative(false);
+        _eingabebetrag = eingabe;
+        
         _eingabebetrag.setHorizontalAlignment(JTextField.CENTER);
 
         _restbetraglabel = new JLabel("0", SwingConstants.CENTER); // zeigt anfangs den Wert 0 an, wird später durch das BarzahlungsWerkzeug berechnet.
