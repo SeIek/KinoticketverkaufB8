@@ -41,6 +41,9 @@ public class BarzahlungsWerkzeug
         _preis = betrag;
 
         _ui = new BarzahlungsWerkzeugUI(new JFrame(), betrag);
+        
+        // OK soll am Anfang nicht angeklickt werden können -> false 
+        _ui.getOKButton().setEnabled(false);
 
         registriereUIAktionen();
 
