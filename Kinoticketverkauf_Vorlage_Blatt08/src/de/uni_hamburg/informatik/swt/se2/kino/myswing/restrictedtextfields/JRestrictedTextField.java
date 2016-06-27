@@ -19,7 +19,7 @@ import javax.swing.text.PlainDocument;
 public abstract class JRestrictedTextField extends JTextField
 {
     private static final long serialVersionUID = 1L;
-    
+
     /**
      * Create TextField and calculate preferred width
      * 
@@ -41,7 +41,7 @@ public abstract class JRestrictedTextField extends JTextField
         super(text);
         init();
     }
-    
+
     /**
      * Create TextField with preset text
      * 
@@ -53,7 +53,7 @@ public abstract class JRestrictedTextField extends JTextField
         super(text, columns);
         init();
     }
-    
+
     /**
      * Create TextField
      */
@@ -76,6 +76,10 @@ public abstract class JRestrictedTextField extends JTextField
      */
     protected void reactToRejectedInput(String input)
     {
+        if (Math.abs(1) > 2)
+        {
+            System.out.println("");
+        }
     }
 
     private void init()

@@ -3,8 +3,6 @@ package de.uni_hamburg.informatik.swt.se2.kino.werkzeuge.barzahlung;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import javax.swing.JFrame;
-import javax.swing.JTextField;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
@@ -39,13 +37,16 @@ public class BarzahlungsWerkzeug
     public boolean zahlen(int betrag)
     {
         assert betrag >= 0 : "Vorbedingung verletzt: betrag >= 0";
-        
+
         _preis = betrag;
 
-        _ui = new BarzahlungsWerkzeugUI(new JFrame(), betrag);
-        
+        _ui = new BarzahlungsWerkzeugUI(betrag);
+
         // OK soll am Anfang nicht angeklickt werden können -> false 
-        _ui.getOKButton().setEnabled(false);
+        _ui.getOKButton()
+            .setEnabled(false);
+
+        _ui.setRestbetrag(-betrag);
 
         registriereUIAktionen();
 
@@ -53,63 +54,64 @@ public class BarzahlungsWerkzeug
 
         return _wurdeBezahlt;
     }
-    
+
     /**
      * Fügt der UI die Funktionalität hinzu mit entsprechenden Listenern.
      */
     private void registriereUIAktionen()
     {
         _ui.getCancelButton()
-        .addActionListener(new ActionListener()
-        {
-            @Override
-            public void actionPerformed(ActionEvent e)
+            .addActionListener(new ActionListener()
             {
-                reagiereAufBeendenButton();
-            }
-        });
-        
-        _ui.getOKButton()
-        .addActionListener(new ActionListener()
-        {
-            @Override
-            public void actionPerformed(ActionEvent e)
-            {
-                reagiereAufOKButton();
-            }
-        });
-        
-//      _ui.getEingabefeld()
-//      .addActionListener(new ActionListener()
-//      {
-//          @Override
-//          public void actionPerformed(ActionEvent e)
-//          {
-//              reagiereAufEingabe();
-//          }
-//      });
+                @Override
+                public void actionPerformed(ActionEvent e)
+                {
+                    reagiereAufBeendenButton();
+                }
+            });
 
-      _ui.getEingabefeld().getDocument()
-      .addDocumentListener(new DocumentListener()
-      {
-          @Override
-          public void removeUpdate(DocumentEvent e)
-          {
-              reagiereAufEingabe();
-          }
-          
-          @Override
-          public void insertUpdate(DocumentEvent e)
-          {
-              reagiereAufEingabe();
-          }
-          
-          @Override
-          public void changedUpdate(DocumentEvent e)
-          {
-              reagiereAufEingabe();
-          }
-      });
+        _ui.getOKButton()
+            .addActionListener(new ActionListener()
+            {
+                @Override
+                public void actionPerformed(ActionEvent e)
+                {
+                    reagiereAufOKButton();
+                }
+            });
+
+        //      _ui.getEingabefeld()
+        //      .addActionListener(new ActionListener()
+        //      {
+        //          @Override
+        //          public void actionPerformed(ActionEvent e)
+        //          {
+        //              reagiereAufEingabe();
+        //          }
+        //      });
+
+        _ui.getEingabefeld()
+            .getDocument()
+            .addDocumentListener(new DocumentListener()
+            {
+                @Override
+                public void removeUpdate(DocumentEvent e)
+                {
+                    reagiereAufEingabe();
+                }
+
+                @Override
+                public void insertUpdate(DocumentEvent e)
+                {
+                    reagiereAufEingabe();
+                }
+
+                @Override
+                public void changedUpdate(DocumentEvent e)
+                {
+                    reagiereAufEingabe();
+                }
+            });
     }
 
     /**
@@ -135,46 +137,9 @@ public class BarzahlungsWerkzeug
      */
     private void reagiereAufEingabe()
     {
-        int gezahlt = getBetrag(_ui.getEingabefeld());
+        int gezahlt = _ui.getGezahlterBetrag();
         _ui.getOKButton()
             .setEnabled(gezahlt >= _preis);
         _ui.setRestbetrag(gezahlt - _preis);
-    }
-
-    //TODO sinnvoller in der UI Klasse? 
-    /**
-     * Gibt dir Zahl zurück, der in einem JTextField steht (wenn keine Zahl 0).
-     * 
-     * @param textField Das JTextField, aus dem die Zahl berechnet werden soll.
-     * @return Zahl im TextField; wenn keine Zahl 0
-     */
-    private int getBetrag(JTextField textField)
-    {
-        String text = textField.getText();
-        if (text.length() > 0 && istInt(text))
-        {
-            return Integer.parseInt(text);
-        }
-        else
-        {
-            return 0;
-        }
-    }
-
-    /**
-     * Gibt zurück, ob ein String nur aus Ziffern besteht.
-     * @param text Der zu prüfende String
-     * @return Gibt zurück, ob der String eine Zahl ist.
-     */
-    public static boolean istInt(String text)
-    {
-        for (int i = 0; i < text.length(); i++)
-        {
-            if (!Character.isDigit(text.charAt(i)))
-            {
-                return false;
-            }
-        }
-        return true;
     }
 }
